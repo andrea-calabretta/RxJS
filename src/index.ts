@@ -18,7 +18,7 @@ console.log('Before subscribe');
 //   next: value => console.log(value)
 // });
 
-//* SHORTEST VERSION -->
+//* COMPACT VERSION -->
 observable$.subscribe(value => console.log(value));
 
 console.log('After subscribe');
