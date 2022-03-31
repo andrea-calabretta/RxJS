@@ -7,7 +7,7 @@ const observable$ = new Observable<string>(subscriber => {
 
 console.log('Before subscribe');
 
-//* COMPLETE VERSION
+//* EXPLICIT VERSION
 // const observer = {
 //   next: (value: string) => console.log(value)
 // }
