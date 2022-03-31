@@ -16,7 +16,7 @@ console.log("Before subscribe");
 //EXPLICIT VERSION
 // const observer = {
 //   next: (value: string) => console.log(value),
-//   error: (err: { message: any; }) => console.log(err.message),
+//   error: (err: { message: string; }) => console.log(err.message),
 //   complete: () => console.log('Completed!')
 // }
 // observable$.subscribe(observer);
