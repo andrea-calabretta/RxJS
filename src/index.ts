@@ -5,9 +5,10 @@ const observable$ = new Observable<string>((subscriber) => {
   subscriber.next('Alice');
   subscriber.next('Ben');
   setTimeout(() => subscriber.error(new Error('Failure')), 2000);
+  //after error No next, no complete happens
   setTimeout(() => {
-    subscriber.next('Charlie');
-    subscriber.complete();
+    subscriber.next('Charlie'); // this won't happen
+    subscriber.complete(); // also this won't happen
   }, 4000);
   return () => {
     console.log("Teardown logic");
