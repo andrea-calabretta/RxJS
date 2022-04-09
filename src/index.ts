@@ -1,13 +1,13 @@
-import { Observable, of } from "rxjs";
+import { from } from "rxjs";
 
 
-// COMPACT VERSION
-// of('Alice', 'Ben', 'Charllie').subscribe(value => console.log(value));
+const somePromise = new Promise((resolve, reject) => {
+  resolve('Resolved!');
+});
 
-// COMPLETE VERSION
-of("Alice", "Ben", "Charlie").subscribe({
+const observableFromPromise$ = from(somePromise);
+
+observableFromPromise$.subscribe({
   next: value => console.log(value),
-  complete: () => console.log('Completed')
-}
-);
-
+  complete: () => console.log('Completed'),
+})
