@@ -1,28 +1,24 @@
-import { fromEvent, Observable } from "rxjs";
+import { interval, Observable } from "rxjs";
 
-const triggerButton = document.querySelector('button#trigger');
+console.log('App started');
 
-// fromEvent<MouseEvent>(triggerButton, 'click').subscribe(
-//   event => console.log(event.type, event.x, event.y)
-// );
+const interval$ = new Observable<number>(subscriber => {
+  let counter = 0;
 
-const triggerClick$ = new Observable<MouseEvent>(subscriber => {
-  const clickHandlerFn = (event: MouseEvent) => {
-    console.log('Event callback executed');
-    subscriber.next(<MouseEvent>event);
-  };
-  triggerButton.addEventListener('click', clickHandlerFn);
-  
-  return () => {
-    triggerButton.removeEventListener('click', clickHandlerFn )
-  }
-});
+  const intervalId = setInterval(() => {
+    console.log('new interval');
+    subscriber.next(counter++);
+  }, 1000);
 
-const subscription = triggerClick$.subscribe(
-  event => console.log(event.type, event.x, event.y)
-);
+  return () => clearInterval(intervalId);
+})
+
+const subscription = interval$.subscribe({
+  next: value => console.log(value),
+  complete: () => console.log('Complete!'),
+})
 
 setTimeout(() => {
-  console.log('Unsubscribe');
   subscription.unsubscribe();
-}, 5000);
+  console.log('Unsubscribe');
+}, 5000)
