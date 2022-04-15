@@ -1,24 +1,63 @@
-import { interval, Observable } from "rxjs";
+import { forkJoin } from "rxjs";
+import { ajax, AjaxResponse } from "rxjs/ajax";
 
-console.log('App started');
+// Mike is from New Delhi and likes to eat pasta.
 
-const interval$ = new Observable<number>(subscriber => {
-  let counter = 0;
+interface IPerson {
+  id: number;
+  uid: string;
+  name: string;
+  two_word_name: string;
+  four_word_name: string;
+  name_with_initials: string;
+  name_with_middle: string;
+  first_name: string;
+  middle_name: string;
+  last_name: string;
+  male_first_name: string;
+  female_first_name: string;
+  prefix: string;
+  initials: string;
+}
+export interface ICountry {
+  id: number;
+  uid: string;
+  nationality: string;
+  language: string;
+  capital: string;
+  national_sport: string;
+  flag: string;
+}
+export interface IFood {
+  id: number;
+  uid: string;
+  dish: string;
+  description: string;
+  ingredient: string;
+  measurement: string;
+}
 
-  const intervalId = setInterval(() => {
-    console.log('new interval');
-    subscriber.next(counter++);
-  }, 1000);
+const randomName$ = ajax<IPerson>
+('https://random-data-api.com/api/name/random_name');
 
-  return () => clearInterval(intervalId);
-})
+const randomNation$ = ajax<ICountry>
+('https://random-data-api.com/api/nation/random_nation');
 
-const subscription = interval$.subscribe({
-  next: value => console.log(value),
-  complete: () => console.log('Complete!'),
-})
+const randomFood$ = ajax<IFood>
+('https://random-data-api.com/api/food/random_food');
 
-setTimeout(() => {
-  subscription.unsubscribe();
-  console.log('Unsubscribe');
-}, 5000)
+// randomName$.subscribe((rnd: AjaxResponse<IPerson>) => console.log
+//   (rnd.response.first_name));
+// randomNation$.subscribe((rnd: AjaxResponse<ICountry>) => console.log
+//   (rnd.response.capital));
+// randomFood$.subscribe((rnd: AjaxResponse<IFood>) => console.log
+//   (rnd.response.dish));
+
+
+forkJoin([randomName$, randomNation$, randomFood$] ).subscribe(
+  ([nameAjax , nationAjax, foodAjax]) => console.log
+  (`${nameAjax.response.first_name} is from ${nationAjax.response.capital} and likes to eat ${foodAjax.response.dish}`));
+
+
+
+
