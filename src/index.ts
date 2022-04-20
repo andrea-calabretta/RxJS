@@ -1,4 +1,4 @@
-import { forkJoin } from "rxjs";
+import { forkJoin, map } from "rxjs";
 import { ajax, AjaxResponse } from "rxjs/ajax";
 
 // Mike is from New Delhi and likes to eat pasta.
@@ -37,27 +37,24 @@ export interface IFood {
   measurement: string;
 }
 
-const randomName$ = ajax<IPerson>
-('https://random-data-api.com/api/name/random_name');
+const randomFirstName$ = ajax<IPerson>
+('https://random-data-api.com/api/name/random_name').pipe(
+  map(ajaxResponse => ajaxResponse.response.first_name)
+);
 
-const randomNation$ = ajax<ICountry>
-('https://random-data-api.com/api/nation/random_nation');
+const randomCapital$ = ajax<ICountry>
+('https://random-data-api.com/api/nation/random_nation').pipe(
+  map(ajaxResponse => ajaxResponse.response.capital)
+);
 
-const randomFood$ = ajax<IFood>
-('https://random-data-api.com/api/food/random_food');
-
-// randomName$.subscribe((rnd: AjaxResponse<IPerson>) => console.log
-//   (rnd.response.first_name));
-// randomNation$.subscribe((rnd: AjaxResponse<ICountry>) => console.log
-//   (rnd.response.capital));
-// randomFood$.subscribe((rnd: AjaxResponse<IFood>) => console.log
-//   (rnd.response.dish));
-
-
-forkJoin([randomName$, randomNation$, randomFood$] ).subscribe(
-  ([nameAjax , nationAjax, foodAjax]) => console.log
-  (`${nameAjax.response.first_name} is from ${nationAjax.response.capital} and likes to eat ${foodAjax.response.dish}`));
+const randomDish$ = ajax<IFood>
+('https://random-data-api.com/api/food/random_food').pipe(
+  map(ajaxResponse => ajaxResponse.response.dish)
+);
 
 
-
+forkJoin([randomFirstName$, randomCapital$, randomDish$]).subscribe(
+  ([firstName, capital, dish]) =>
+    console.log(`${firstName} is from ${capital} and likes to eat ${dish}.`)
+);
 
