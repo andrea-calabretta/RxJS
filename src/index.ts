@@ -1,4 +1,4 @@
-import { catchError, Observable, of } from "rxjs";
+import { catchError, EMPTY, Observable, of } from "rxjs";
 
 const failingHttpRequest$ = new Observable(subscriber => {
   setTimeout(() => {
@@ -9,7 +9,8 @@ const failingHttpRequest$ = new Observable(subscriber => {
 console.log('App started');
 
 failingHttpRequest$.pipe(
-  catchError(error => of('Fallback value'))
-).subscribe(
-  value => console.log(value)
-)
+  catchError(error => EMPTY)
+).subscribe({
+  next: value => console.log(value),
+  complete: () => console.log('Completed')
+});
