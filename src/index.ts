@@ -1,4 +1,4 @@
-import { concatMap, fromEvent, map } from "rxjs";
+import { catchError, concatMap, EMPTY, fromEvent, map } from "rxjs";
 import { ajax } from 'rxjs/ajax';
 
 const endpointInput : HTMLInputElement = document.querySelector('input#endpoint');
@@ -8,8 +8,11 @@ fromEvent(fetchButton, 'click').pipe(
   map( () => endpointInput.value ),
   concatMap(value => 
     ajax(`https://random-data-api.com/api/${value}/random_${value}`)
-  )
-).subscribe(
-  value => console.log(value)
-);
+  ),
+  catchError( () => EMPTY)
+).subscribe({
+  next: value => console.log(value),
+  error: err => console.log('Err: ', err),
+  complete: () => console.log('Completed')
+});
 
