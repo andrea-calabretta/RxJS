@@ -1,18 +1,24 @@
-import { fromEvent, map, Subject } from "rxjs";
+import { fromEvent, Subject } from "rxjs";
 
-const emitButton = document.querySelector('button#emit');
-const inputElement: HTMLInputElement = document.querySelector('#value-input');
-const subscribeButton = document.querySelector('button#subscribe');
+const loggedInSpan: HTMLElement = document.querySelector('span#logged-in');
+const loginButton: HTMLElement = document.querySelector('button#login');
+const logoutButton: HTMLElement = document.querySelector('button#logout');
+const printStateButton: HTMLElement = document.querySelector('button#print-state');
 
-const value$ = new Subject<string>();
+const isLoggedIn$ = new Subject<boolean>();
 
-fromEvent(emitButton, 'click').pipe(
-  map(() => inputElement.value)
-).subscribe(value$)
+fromEvent(loginButton, 'click').subscribe(() => isLoggedIn$.next(true));
+fromEvent(logoutButton, 'click').subscribe(() => isLoggedIn$.next(false));
 
-fromEvent(subscribeButton, 'click').subscribe(
-  () => {
-    console.log('New Subscription');
-    value$.subscribe(value => console.log(value));
-  }
+
+// Navigation bar
+isLoggedIn$.subscribe(
+  isLoggedIn => loggedInSpan.innerText = isLoggedIn.toString()
 );
+
+//Buttons
+isLoggedIn$.subscribe(isLoggedIn$ => {
+  logoutButton.style.display = isLoggedIn$ ? 'block' : 'none';
+  loginButton.style.display = !isLoggedIn$ ? 'block' : 'none';
+})
+
