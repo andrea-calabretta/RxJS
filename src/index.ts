@@ -12,7 +12,7 @@ console.log('Subscription 1 starts');
 someObservable$.subscribe(value => console.log('Subscription 1:', value));
 
 setTimeout(() => {
-  console.log('Subscription 1 starts');
+  console.log('Subscription 2 starts');
   someObservable$.subscribe(value => console.log('Subscription 2:', value));
 }, 1000);
 
