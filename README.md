@@ -1,3 +1,7 @@
+# Documentazione riguardo teoria ed esercizi su RxJS:
+
+https://docs.google.com/document/d/1ZE1D8SIlNv9GRaf0wn8ttzG9nQ4BnVNwIJId4XF_W7A/edit?usp=sharing
+
 # RxJS playground
 
 1. Run `npm install`. This will install all needed dependencies.
