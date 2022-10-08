@@ -1,13 +1,11 @@
-import { Observable, of } from "rxjs";
+import { fromEvent,switchMap, interval, take} from 'rxjs';
 
+const clicks = fromEvent(document, 'click');
 
-// COMPACT VERSION
-// of('Alice', 'Ben', 'Charllie').subscribe(value => console.log(value));
-
-// COMPLETE VERSION
-of("Alice", "Ben", "Charlie").subscribe({
-  next: value => console.log(value),
-  complete: () => console.log('Completed')
-}
+const result = clicks.pipe(
+  switchMap(ev => interval(500).pipe(take(4))) ,
 );
+
+
+result.subscribe(x => console.log(x) );
 
